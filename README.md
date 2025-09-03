@@ -17,7 +17,7 @@ pi restore
 
 Package ignore (pi) is not opinionated about your release workflow. It simply provides a way to clean up and restore the `package.json` file.
 
-The `pi` command will look for the `package.json` file in the current direcotry and for the first matching `.package-ignore` file in the current directory, walking up the directory tree.
+The `pi` command will look for the `package.json` file in the current directory and for the first matching `.package-ignore` file in the current directory, walking up the directory tree. See [Syntax of the `.package-ignore` file](#syntax-of-the-package-ignore-file) for more details.
 
 Example for a simple integration with `npm publish`:
 
@@ -30,29 +30,25 @@ Example for a simple integration with `npm publish`:
 }
 ```
 
-Note: Your actual build script might look different.
+Note: Your actual build process might look different.
 
 ## Syntax of the `.package-ignore` file
 
-The `.package-ignore` file is a simple text file that contains a list of patterns.
+The `.package-ignore` file is a simple text file that contains a list of patterns. Each non-empty line (modulo comments) is an ignore pattern.
 
 * **Comments:**  All content after `#` is ignored.
 * **Special characters:**
-  * A dot `.` separates keys in an exclusion (blacklist) or inclusion (whitelist) pattern.
-  * A line consisting of only `*` blacklists the whole `package.json` content.
-  * A line starting with an exclamation mark `!` is a whitelist pattern and overrides blacklist patterns.
+  * A dot `.` separates JSON keys in a line.
+  * A line consisting of only `*` ignores the whole `package.json` content.
+  * A line starting with an exclamation mark `!` is an allowlist pattern and overrides ignore patterns.
 * **Escaping:**
-  * A backslash `\` is used to escape the dot `.`, the hash `#` and the backslash `\` in key names.
-  * Additionally, (leading) asterisks `*` and (leading) exclamation marks can be escaped, if needed.
-* **Whitespace:** leading & trailing whitespace and empty lines are ignored.
-
-Notes:
-
-* **Globs:** Glob patterns like `**/*` are not supported!
+  * A backslash `\` is used to escape the dot `.`, the hash `#`, and the backslash `\` in key names.
+  * Additionally, (leading) asterisks `*` and (leading) exclamation marks can be escaped if needed.
+* **Whitespace:** Technically, leading and trailing whitespace are also allowed in key names, however, they are ignored.
 
 ## Examples
 
-The **whitelist** pattern (strict):
+The **allowlist** pattern (strict):
 
 ```sh
 *  # ignore all '*' except...
@@ -66,20 +62,10 @@ The **whitelist** pattern (strict):
 # }
 ```
 
+The **ignore** pattern (open):
+
 ```sh
 devDependencies  # This will ignore the "devDependencies" key
-* # This will ignore all keys in the package.json file
-!scripts # This will include the "scripts" key and all its content
-scripts.build:examples # This will ignore the "build:examples" script
-scripts.build\.examples # This will ignore the "build.examples" script
+scripts.build  # This will ignore the "build" script
+!files # Keeping the "files" key is important for creating the tarball
 ```
-
-Each non-empty line (modulo comments) is an ignore pattern.
-
-* **Comments:**  All content after `#` is ignored.
-* **Special characters:**
-  * A dot `.` separates json keys in a line.
-  * A line consisting of only `*` blacklists the whole `package.json` content.
-  * A line starting with `!` is a whitelist pattern and overrides blacklist patterns.
-* **Escaping:**  A backslash `\` is used to escape the dot `.`, the hash `#` and the backslash `\` in key names.
-* **Whitespace:** Technically, leading and trailing whitespace are also allowed in key names, however, they are ignored.
