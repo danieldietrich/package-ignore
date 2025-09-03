@@ -1,0 +1,43 @@
+{
+  "name": "package-ignore",
+  "version": "0.0.0",
+  "description": "The missing tool to clean up the package.json file before publishing.",
+  "files": [
+    "bin/index.cjs",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "pi": "bin/index.cjs"
+  },
+  "keywords": [
+    "package-ignore",
+    "pi",
+    "cleanup",
+    "dependencies",
+    "devDependencies",
+    "ignore",
+    "package",
+    "package.json",
+    "publish",
+    "release",
+    "safety",
+    "security",
+    "vulnerabilities"
+  ],
+  "scripts": {
+    "prepack": "pi",
+    "postpack": "pi restore"
+  },
+  "author": "Daniel Dietrich",
+  "license": "MIT",
+  "homepage": "https://github.com/danieldietrich/package-ignore#readme",
+  "bugs": {
+    "url": "https://github.com/danieldietrich/package-ignore/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danieldietrich/package-ignore.git"
+  }
+}
