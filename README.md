@@ -11,7 +11,7 @@ npm i -g package-ignore
 ## Usage
 
 ```bash
-# Clean up the package.json file based on the patterns in the
+# Clean up the package.json file based on the definitions in the
 # .package-ignore file (see below).
 # Creates a backup file package-ignore-backup.json.
 pi
@@ -23,7 +23,7 @@ pi restore
 
 Package ignore (pi) is not opinionated about your release workflow. It simply provides a way to clean up and restore the `package.json` file.
 
-The `pi` command will look for the `package.json` file in the current directory and for the first matching `.package-ignore` file in the current directory, walking up the directory tree. See [Syntax of the `.package-ignore` file](#syntax-of-the-package-ignore-file) for more details.
+The `pi` command will look for the `package.json` file in the current directory. Additionally, it will resolve the `.package-ignore` file (see [Syntax](#syntax)), starting in the current directory, walking up the directory tree.
 
 Example for a simple integration with `npm publish`:
 
@@ -36,31 +36,42 @@ Example for a simple integration with `npm publish`:
 }
 ```
 
-Note: Your actual build process might look different.
+Here, the tarball will contain the cleaned up `package.json` file. The scripts `prepack` and `postpack` will be triggered by `npm pack` and `npm publish`, respectively.
 
-## Syntax of the `.package-ignore` file
+## Syntax
 
-The `.package-ignore` file is a simple text file that contains a list of patterns. Each non-empty line (modulo comments) is an ignore pattern.
+The `.package-ignore` file is a simple text file that contains a list of definitions. Each non-empty line (modulo comments) is a definition.
 
-* **Comments:**  All content after `#` is ignored.
-* **Special characters:**
-  * A dot `.` separates JSON keys in a line.
-  * A line consisting of only `*` ignores the whole `package.json` content.
-  * A line starting with an exclamation mark `!` is an allowlist pattern and overrides ignore patterns.
-* **Escaping:**
-  * A backslash `\` is used to escape the dot `.`, the hash `#`, and the backslash `\` in key names.
-  * Additionally, (leading) asterisks `*` and (leading) exclamation marks can be escaped if needed.
-* **Whitespace:** Technically, leading and trailing whitespace are also allowed in key names, however, they are ignored.
+### Comments
+
+* All content after a (unescaped) hash `#` is ignored.
+
+### Special characters
+
+* A dot `.` separates JSON keys in a line.
+* A line consisting of only `*` ignores the whole `package.json` content.
+* A line starting with an exclamation mark `!` defines an allowed JSON path and may override (a part of) an ignored JSON path.
+
+### Escaping
+
+* A backslash `\` is used to escape characters, including itself.
+* The dot `.` and the hash `#` need to be escaped if they are part of a key name.
+* If the `package.json` has a top-level key `*` or a top-level key starting with `!`, those first characters must be escaped.
+* Escaping other key name characters has no effect.
+
+### Whitespace
+
+* Technically, leading and trailing whitespace are also allowed in JSON key names; however, whitespace is trimmed by the parser for definitions and key names.
 
 ## Examples
 
 The **allowlist** pattern (strict):
 
 ```sh
-*  # ignore all '*' except...
-!scripts.build:examples # ...not '!' these ones
+* # '*' ignores all package.json content except...
+!scripts.build:examples # ...those patterns prefixed with '!'
 
-# will result in a package.json with the following content:
+# Will result in a package.json with the following content:
 # {
 #   "scripts": {
 #     "build:examples": "..."
@@ -71,7 +82,7 @@ The **allowlist** pattern (strict):
 The **ignore** pattern (open):
 
 ```sh
-devDependencies  # This will ignore the "devDependencies" key
-scripts.build  # This will ignore the "build" script
+devDependencies # This will ignore the "devDependencies" key
+scripts.build # This will ignore the "build" script
 !files # Keeping the "files" key is important for creating the tarball
 ```
