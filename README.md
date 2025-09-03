@@ -2,6 +2,12 @@
 
 The missing tool to clean up the package.json file before publishing.
 
+## Installation
+
+```bash
+npm i -g package-ignore
+```
+
 ## Usage
 
 ```bash
