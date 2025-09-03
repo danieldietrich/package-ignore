@@ -1,0 +1,26 @@
+{
+  "name": "test-whitespace",
+  "version": "1.0.0",
+  "description": "Test package for whitespace handling",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "non-spaced-key": "value without spaces",
+  "  spacedKey  ": "value with spaces",
+  "spaced key": "value with spaces",
+  "some": {
+    "spaced key": {
+      "child": "value with spaces"
+    }
+  },
+  "keywords": ["test", "whitespace"],
+  "author": "Test User",
+  "license": "MIT"
+}

@@ -1,0 +1,5 @@
+devDependencies # Remove devDependencies
+config.build # Remove optimization config
+config.dev # Remove dev config
+!config.build.target # Keep build target
+!files # Keep files array

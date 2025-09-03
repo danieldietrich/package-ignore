@@ -1,0 +1,10 @@
+\* # Top-level key "*" must be escaped
+\!hello # Top-level key starting with "!" must be escaped
+scripts.build\.dev # JSON key name containing dot needs to be escaped
+devDependencies # Remove devDependencies
+config.build.target # Remove nested config
+config.build.output # Remove nested config
+build\\:config-dev # Colon does not need to be escaped
+build\\\:config-prod # However, colon may be escaped as well (like every other character)
+escape\\\#test1 # Hash needs to be escaped
+escape\\#test2 # Otherwise this ignore definition will not match

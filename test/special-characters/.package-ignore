@@ -1,0 +1,3 @@
+* # Ignore everything
+!scripts.build:examples # Allow build:examples script
+!files # Keep files array

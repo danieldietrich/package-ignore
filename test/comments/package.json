@@ -1,0 +1,22 @@
+{
+  "name": "test-comments",
+  "version": "1.0.0",
+  "description": "Test package for comment handling",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"Building...\"",
+    "dev": "echo \"Development mode\""
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "eslint": "^8.0.0"
+  },
+  "keywords": ["test", "comments"],
+  "author": "Test User",
+  "license": "MIT"
+}

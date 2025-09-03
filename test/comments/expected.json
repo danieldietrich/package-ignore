@@ -1,0 +1,18 @@
+{
+  "name": "test-comments",
+  "version": "1.0.0",
+  "description": "Test package for comment handling",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "keywords": [
+    "test",
+    "comments"
+  ],
+  "author": "Test User",
+  "license": "MIT"
+}

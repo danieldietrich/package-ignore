@@ -1,0 +1,38 @@
+{
+  "name": "test-complex-nested",
+  "version": "1.0.0",
+  "description": "Test package for complex nested paths",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"Building...\"",
+    "dev": "echo \"Development mode\""
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "config": {
+    "build": {
+      "target": "es2020",
+      "output": "dist",
+      "optimization": {
+        "minify": true,
+        "splitChunks": true
+      }
+    },
+    "dev": {
+      "port": 3000,
+      "hot": true
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "keywords": ["test", "complex", "nested"],
+  "author": "Test User",
+  "license": "MIT"
+}

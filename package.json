@@ -28,7 +28,8 @@
   ],
   "scripts": {
     "prepack": "pi",
-    "postpack": "pi restore"
+    "postpack": "pi restore",
+    "test": "test/test-suite.sh"
   },
   "author": "Daniel Dietrich",
   "license": "MIT",

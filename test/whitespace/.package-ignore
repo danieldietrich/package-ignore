@@ -1,0 +1,6 @@
+devDependencies # Remove devDependencies
+  non-spaced-key    # Will be removed
+  spacedKey   # Will not be removed (key names with surrounded spaces are not supported)
+spaced key  # Will be removed
+some.spaced key.child # Will be removed
+# TODO: some . spaced key . child # is currently not supported. Maybe we can switch to escaped space?

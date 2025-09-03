@@ -1,0 +1,23 @@
+{
+  "name": "test-escaping",
+  "version": "1.0.0",
+  "description": "Test package for escaping",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "config": {
+    "build.target": "es2020",
+    "build.output": "dist"
+  },
+  "escape\\#test2": "value",
+  "keywords": [
+    "test",
+    "escaping"
+  ],
+  "author": "Test User",
+  "license": "MIT"
+}

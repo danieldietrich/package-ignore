@@ -1,0 +1,25 @@
+{
+  "name": "test-special-chars",
+  "version": "1.0.0",
+  "description": "Test package for special characters",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:examples": "echo \"Building examples...\"",
+    "build:docs": "echo \"Building docs...\"",
+    "dev": "echo \"Development mode\""
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "keywords": ["test", "special"],
+  "author": "Test User",
+  "license": "MIT"
+}

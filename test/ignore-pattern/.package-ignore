@@ -1,0 +1,3 @@
+devDependencies # This will ignore the "devDependencies" key
+scripts.build # This will ignore the "build" script
+!files # Keeping the "files" key is important for creating the tarball
