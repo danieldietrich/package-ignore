@@ -8,6 +8,7 @@
     "README.md",
     "LICENSE"
   ],
+  "main": "bin/index.cjs",
   "bin": {
     "pi": "bin/index.cjs"
   },
