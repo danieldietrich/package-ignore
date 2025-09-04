@@ -3,7 +3,7 @@
 # Test suite for package-ignore tool
 # This script runs all test scenarios and reports results
 
-set -e  # Exit on any error
+# set -e  # Exit on any error - removed to allow proper cleanup on test failures
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TOOL_PATH="$SCRIPT_DIR/../bin/index.cjs"
@@ -43,7 +43,7 @@ run_test() {
     echo -n "Testing $scenario_name... "
 
     # Change to scenario directory
-    cd "$scenario_dir"
+    cd "$scenario_dir" || exit 1
 
     # Run the package-ignore tool
     if node "$TOOL_PATH" > /dev/null 2>&1; then
@@ -68,7 +68,7 @@ run_test() {
     fi
 
     # Go back to test directory
-    cd "$SCRIPT_DIR"
+    cd "$SCRIPT_DIR" || exit 1
 }
 
 # Run all test scenarios
