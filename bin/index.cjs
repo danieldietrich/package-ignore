@@ -4,19 +4,20 @@ const fs = require('fs');
 const path = require('path');
 
 // read arguments
+const script = 'npx pi';
 const args = process.argv.slice(2);
 const command = args[0];
 const isDryRun = args.includes('--dry-run');
 
 // -- help command `pi --help`
 if (command === '--help') {
-  console.log(`Package Ignore (pi) - Clean up package.json before publishing
+  console.log(`package-ignore (pi): Cleanup tool for package.json
 
 Usage:
-  pi clean             Backup & clean package.json based on .package-ignore
-  pi clean --dry-run   Preview changes without making them
-  pi restore           Restore package.json from backup
-  pi --help            Show this help message
+  ${script} clean             Backup & clean package.json based on .package-ignore
+  ${script} clean --dry-run   Preview changes without making them
+  ${script} restore           Restore package.json from backup
+  ${script} --help            Show this help message
 
 The tool will look for a .package-ignore file in the current directory or parent directories.
 If no .package-ignore file is found, devDependencies will be ignored by default.
@@ -116,7 +117,7 @@ if (command === 'clean') {
 if (command) {
   console.error(`Unknown command: ${command}`);
 }
-console.error('Use "pi --help" for usage information');
+console.error(`Use "${script} --help" for usage information`);
 process.exit(1);
 
 // returns [ignorelist, allowlist, excludeAll]
