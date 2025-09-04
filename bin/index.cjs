@@ -63,15 +63,15 @@ if (command === 'clean') {
     ignorePatterns = 'devDependencies';
   }
 
-  const [blacklist, whitelist, excludeAll] = parseIgnorePatterns(ignorePatterns);
+  const [ignorelist, allowlist, excludeAll] = parseIgnorePatterns(ignorePatterns);
 
   if (excludeAll) {
-    // If '*' is present, start with empty package.json and apply whitelist
+    // If '*' is present, start with empty package.json and apply allowlist
     const cleanedPackageJson = {};
-    applyWhitelist(cleanedPackageJson, whitelist, packageJson);
+    applyAllowlist(cleanedPackageJson, allowlist, packageJson);
 
     if (isDryRun) {
-      console.log('DRY RUN - Would apply whitelist-only mode:');
+      console.log('DRY RUN - Would apply allowlist-only mode:');
       console.log('Cleaned package.json:');
       console.log(JSON.stringify(cleanedPackageJson, null, 2));
     } else {
@@ -80,19 +80,19 @@ if (command === 'clean') {
       console.log('Created backup: package-ignore-backup.json');
 
       fs.writeFileSync('package.json', JSON.stringify(cleanedPackageJson, null, 2));
-      console.log('Applied whitelist-only mode (excluded all, then included whitelisted items)');
+      console.log('Applied allowlist-only mode (excluded all, then included allowlisted items)');
       console.log('package.json cleaned successfully');
     }
   } else {
-    // Apply blacklist to remove unwanted items, then apply whitelist to override
+    // Apply ignorelist to remove unwanted items, then apply allowlist to override
     const cleanedPackageJson = JSON.parse(JSON.stringify(packageJson));
     const originalKeys = JSON.parse(JSON.stringify(packageJson));
 
-    applyBlacklist(cleanedPackageJson, blacklist);
-    applyWhitelist(cleanedPackageJson, whitelist, packageJson);
+    applyIgnorelist(cleanedPackageJson, ignorelist);
+    applyAllowlist(cleanedPackageJson, allowlist, packageJson);
 
     if (isDryRun) {
-      console.log('DRY RUN - Would apply blacklist and whitelist patterns:');
+      console.log('DRY RUN - Would apply ignorelist and allowlist patterns:');
       console.log('Cleaned package.json:');
       console.log(JSON.stringify(cleanedPackageJson, null, 2));
     } else {
@@ -101,7 +101,7 @@ if (command === 'clean') {
       console.log('Created backup: package-ignore-backup.json');
 
       fs.writeFileSync('package.json', JSON.stringify(cleanedPackageJson, null, 2));
-      console.log('Applied blacklist and whitelist patterns');
+      console.log('Applied ignorelist and allowlist patterns');
       console.log('package.json cleaned successfully');
     }
   }
@@ -119,7 +119,7 @@ if (command) {
 console.error('Use "pi --help" for usage information');
 process.exit(1);
 
-// returns [blacklist, whitelist, excludeAll]
+// returns [ignorelist, allowlist, excludeAll]
 function parseIgnorePatterns(ignorePatterns = 'devDependencies') {
   const lines = ignorePatterns
     .split('\n')
@@ -150,23 +150,23 @@ function parseIgnorePatterns(ignorePatterns = 'devDependencies') {
   // Filter out '*' lines and group by prefix
   const filteredLines = lines.filter(line => line !== '*');
 
-  const blacklist = [];
-  const whitelist = [];
+  const ignorelist = [];
+  const allowlist = [];
 
   filteredLines.forEach(line => {
     if (line.startsWith('!')) {
-      // Whitelist pattern
+      // Allowlist pattern
       const pattern = line.slice(1);
       const keys = splitByUnescapedDot(pattern);
-      whitelist.push(keys);
+      allowlist.push(keys);
     } else {
-      // Blacklist pattern
+      // Ignorelist pattern
       const keys = splitByUnescapedDot(line);
-      blacklist.push(keys);
+      ignorelist.push(keys);
     }
   });
 
-  return [blacklist, whitelist, excludeAll];
+  return [ignorelist, allowlist, excludeAll];
 }
 
 /**
@@ -206,19 +206,19 @@ function unescapeKey(key) {
 }
 
 /**
- * Apply blacklist patterns to package.json
+ * Apply ignorelist patterns to package.json
  */
-function applyBlacklist(packageJson, blacklist) {
-  blacklist.forEach(pattern => {
+function applyIgnorelist(packageJson, ignorelist) {
+  ignorelist.forEach(pattern => {
     removeByPath(packageJson, pattern);
   });
 }
 
 /**
- * Apply whitelist patterns to package.json
+ * Apply allowlist patterns to package.json
  */
-function applyWhitelist(packageJson, whitelist, originalPackageJson) {
-  whitelist.forEach(pattern => {
+function applyAllowlist(packageJson, allowlist, originalPackageJson) {
+  allowlist.forEach(pattern => {
     copyByPath(packageJson, originalPackageJson, pattern);
   });
 }
