@@ -27,8 +27,8 @@
     "vulnerabilities"
   ],
   "scripts": {
-    "prepack": "pi clean",
-    "postpack": "pi restore",
+    "prepack": "npx pi clean",
+    "postpack": "npx pi restore",
     "test": "test/test-suite.sh"
   },
   "author": "Daniel Dietrich",

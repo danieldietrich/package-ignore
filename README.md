@@ -5,15 +5,17 @@ The missing tool to clean up the package.json file before publishing.
 ## Installation
 
 ```bash
-npm i -g package-ignore
+# Install package-ignore as a devDependency,
+# available as command `npx pi`
+npm i -D package-ignore
 ```
 
 ## Usage
 
-* **`pi clean`** - Clean the package.json file based on .package-ignore patterns
-* **`pi clean --dry-run`** - Preview what would be cleaned without making changes
-* **`pi restore`** - Restore the package.json from backup
-* **`pi --help`** - Show help information
+* **`npx pi clean`** - Clean the package.json file based on .package-ignore patterns
+* **`npx pi clean --dry-run`** - Preview what would be cleaned without making changes
+* **`npx pi restore`** - Restore the package.json from backup
+* **`npx pi --help`** - Show help information
 
 Package ignore (pi) is not opinionated about your release workflow. It simply provides a way to clean up and restore the `package.json` file.
 
@@ -24,8 +26,8 @@ Example for a simple integration with `npm publish`:
 ```json
 {
   "scripts": {
-    "prepack": "pi clean",
-    "postpack": "pi restore"
+    "prepack": "npx pi clean",
+    "postpack": "npx pi restore"
   }
 }
 ```
