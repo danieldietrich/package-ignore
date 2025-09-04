@@ -1,5 +1,4 @@
 .DS_Store
 *.tgz
 node_modules/
-package-lock.json
 package-ignore-backup.json
