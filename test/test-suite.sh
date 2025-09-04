@@ -73,7 +73,7 @@ run_test() {
 
 # Run all test scenarios
 for scenario_dir in "$SCRIPT_DIR"/*/; do
-    if [ -d "$scenario_dir" ] && [ -f "$scenario_dir/package.json" ] && [ -f "$scenario_dir/.package-ignore" ] && [ -f "$scenario_dir/expected.json" ]; then
+    if [ -d "$scenario_dir" ] && [ -f "$scenario_dir/package.json" ] && [ -f "$scenario_dir/expected.json" ]; then
         scenario_name=$(basename "$scenario_dir")
         run_test "$scenario_name" "$scenario_dir"
     fi

@@ -23,7 +23,7 @@ pi restore
 
 Package ignore (pi) is not opinionated about your release workflow. It simply provides a way to clean up and restore the `package.json` file.
 
-The `pi` command will look for the `package.json` file in the current directory. Additionally, it will resolve the `.package-ignore` file (see [Syntax](#syntax)), starting in the current directory, walking up the directory tree.
+The `pi` command will look for the `package.json` file in the current directory. Additionally, it will resolve the `.package-ignore` file (see [Syntax](#syntax)), starting in the current directory, walking up the directory tree. If no `.package-ignore` file is found, the default patterns `devDependencies` will be used.
 
 Example for a simple integration with `npm publish`:
 
