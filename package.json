@@ -1,6 +1,6 @@
 {
   "name": "package-ignore",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The missing tool to clean up the package.json file before publishing.",
   "files": [
     "bin/index.cjs",
