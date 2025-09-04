@@ -10,27 +10,21 @@ npm i -g package-ignore
 
 ## Usage
 
-```bash
-# Clean up the package.json file based on the definitions in the
-# .package-ignore file (see below).
-# Creates a backup file package-ignore-backup.json.
-pi
-
-# Restores the backup package-ignore-backup.json and overwrites
-# the package.json file. The backup file is deleted afterwards.
-pi restore
-```
+* **`pi clean`** - Clean the package.json file based on .package-ignore patterns
+* **`pi clean --dry-run`** - Preview what would be cleaned without making changes
+* **`pi restore`** - Restore the package.json from backup
+* **`pi --help`** - Show help information
 
 Package ignore (pi) is not opinionated about your release workflow. It simply provides a way to clean up and restore the `package.json` file.
 
-The `pi` command will look for the `package.json` file in the current directory. Additionally, it will resolve the `.package-ignore` file (see [Syntax](#syntax)), starting in the current directory, walking up the directory tree. If no `.package-ignore` file is found, the default patterns `devDependencies` will be used.
+The `pi clean` command will look for the `package.json` file in the current directory. Additionally, it will resolve the `.package-ignore` file (see [Syntax](#syntax)), starting in the current directory, walking up the directory tree. If no `.package-ignore` file is found, the default patterns `devDependencies` will be used.
 
 Example for a simple integration with `npm publish`:
 
 ```json
 {
   "scripts": {
-    "prepack": "pi",
+    "prepack": "pi clean",
     "postpack": "pi restore"
   }
 }

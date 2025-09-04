@@ -27,7 +27,7 @@
     "vulnerabilities"
   ],
   "scripts": {
-    "prepack": "pi",
+    "prepack": "pi clean",
     "postpack": "pi restore",
     "test": "test/test-suite.sh"
   },

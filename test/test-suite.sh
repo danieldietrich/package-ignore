@@ -46,7 +46,7 @@ run_test() {
     cd "$scenario_dir" || exit 1
 
     # Run the package-ignore tool
-    if node "$TOOL_PATH" > /dev/null 2>&1; then
+    if node "$TOOL_PATH" clean > /dev/null 2>&1; then
         # Compare result with expected using JSON comparison
         if compare_json package.json expected.json; then
             echo -e "${GREEN}✓ PASS${RESET_COLOR}"

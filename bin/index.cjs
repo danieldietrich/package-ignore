@@ -6,9 +6,26 @@ const path = require('path');
 // read arguments
 const args = process.argv.slice(2);
 const command = args[0];
+const isDryRun = args.includes('--dry-run');
+
+// -- help command `pi --help`
+if (command === '--help') {
+  console.log(`Package Ignore (pi) - Clean up package.json before publishing
+
+Usage:
+  pi clean             Backup & clean package.json based on .package-ignore
+  pi clean --dry-run   Preview changes without making them
+  pi restore           Restore package.json from backup
+  pi --help            Show this help message
+
+The tool will look for a .package-ignore file in the current directory or parent directories.
+If no .package-ignore file is found, devDependencies will be ignored by default.
+
+The backup file package-ignore-backup.json is created in the current directory.`);
+  process.exit(0);
+}
 
 // -- restore command `pi restore`
-
 if (command === 'restore') {
   if (!fs.existsSync('package-ignore-backup.json')) {
     console.error('package-ignore-backup.json not found');
@@ -20,54 +37,87 @@ if (command === 'restore') {
   process.exit(0);
 }
 
-// -- main command `pi`
+// -- clean command `pi clean`
+if (command === 'clean') {
+  // ensure package.json exists
+  if (!fs.existsSync('package.json')) {
+    console.error('package.json not found');
+    process.exit(1);
+  }
 
-// ensure package.json exists
-if (!fs.existsSync('package.json')) {
-  console.error('package.json not found');
-  process.exit(1);
+  // don't overwrite existing backup file
+  if (fs.existsSync('package-ignore-backup.json')) {
+    console.error('package-ignore-backup.json already exists');
+    process.exit(1);
+  }
+
+  // read package.json
+  const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+  // read ignore patterns
+  let ignorePatterns;
+  try {
+    ignorePatterns = resolveFile('.package-ignore');
+  } catch (error) {
+    console.log('No .package-ignore file found, using default patterns');
+    ignorePatterns = 'devDependencies';
+  }
+
+  const [blacklist, whitelist, excludeAll] = parseIgnorePatterns(ignorePatterns);
+
+  if (excludeAll) {
+    // If '*' is present, start with empty package.json and apply whitelist
+    const cleanedPackageJson = {};
+    applyWhitelist(cleanedPackageJson, whitelist, packageJson);
+
+    if (isDryRun) {
+      console.log('DRY RUN - Would apply whitelist-only mode:');
+      console.log('Cleaned package.json:');
+      console.log(JSON.stringify(cleanedPackageJson, null, 2));
+    } else {
+      // create backup of package.json
+      fs.copyFileSync('package.json', 'package-ignore-backup.json');
+      console.log('Created backup: package-ignore-backup.json');
+
+      fs.writeFileSync('package.json', JSON.stringify(cleanedPackageJson, null, 2));
+      console.log('Applied whitelist-only mode (excluded all, then included whitelisted items)');
+      console.log('package.json cleaned successfully');
+    }
+  } else {
+    // Apply blacklist to remove unwanted items, then apply whitelist to override
+    const cleanedPackageJson = JSON.parse(JSON.stringify(packageJson));
+    const originalKeys = JSON.parse(JSON.stringify(packageJson));
+
+    applyBlacklist(cleanedPackageJson, blacklist);
+    applyWhitelist(cleanedPackageJson, whitelist, packageJson);
+
+    if (isDryRun) {
+      console.log('DRY RUN - Would apply blacklist and whitelist patterns:');
+      console.log('Cleaned package.json:');
+      console.log(JSON.stringify(cleanedPackageJson, null, 2));
+    } else {
+      // create backup of package.json
+      fs.copyFileSync('package.json', 'package-ignore-backup.json');
+      console.log('Created backup: package-ignore-backup.json');
+
+      fs.writeFileSync('package.json', JSON.stringify(cleanedPackageJson, null, 2));
+      console.log('Applied blacklist and whitelist patterns');
+      console.log('package.json cleaned successfully');
+    }
+  }
+
+  if (isDryRun) {
+    console.log('\nDRY RUN completed - no changes were made');
+  }
+  process.exit(0);
 }
 
-// don't overwrite existing backup file
-if (fs.existsSync('package-ignore-backup.json')) {
-  console.error('package-ignore-backup.json already exists');
-  process.exit(1);
+// -- unknown command
+if (command) {
+  console.error(`Unknown command: ${command}`);
 }
-
-// create backup of package.json
-fs.copyFileSync('package.json', 'package-ignore-backup.json');
-console.log('Created backup: package-ignore-backup.json');
-
-// read package.json
-const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-
-// read ignore patterns
-let ignorePatterns;
-try {
-  ignorePatterns = resolveFile('.package-ignore');
-} catch (error) {
-  console.log('No .package-ignore file found, using default patterns');
-  ignorePatterns = 'devDependencies';
-}
-
-const [blacklist, whitelist, excludeAll] = parseIgnorePatterns(ignorePatterns);
-
-if (excludeAll) {
-  // If '*' is present, start with empty package.json and apply whitelist
-  const cleanedPackageJson = {};
-  applyWhitelist(cleanedPackageJson, whitelist, packageJson);
-  fs.writeFileSync('package.json', JSON.stringify(cleanedPackageJson, null, 2));
-  console.log('Applied whitelist-only mode (excluded all, then included whitelisted items)');
-} else {
-  // Apply blacklist to remove unwanted items, then apply whitelist to override
-  const cleanedPackageJson = JSON.parse(JSON.stringify(packageJson));
-  applyBlacklist(cleanedPackageJson, blacklist);
-  applyWhitelist(cleanedPackageJson, whitelist, packageJson);
-  fs.writeFileSync('package.json', JSON.stringify(cleanedPackageJson, null, 2));
-  console.log('Applied blacklist and whitelist patterns');
-}
-
-console.log('package.json cleaned successfully');
+console.error('Use "pi --help" for usage information');
+process.exit(1);
 
 // returns [blacklist, whitelist, excludeAll]
 function parseIgnorePatterns(ignorePatterns = 'devDependencies') {
