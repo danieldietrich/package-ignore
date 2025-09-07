@@ -12,14 +12,14 @@ npm i -D package-ignore
 
 ## Usage
 
-* **`npx pi clean`** - Clean the package.json file based on .package-ignore patterns
+* **`npx pi clean`** - Clean the package.json file based on `.package-ignore` patterns
 * **`npx pi clean --dry-run`** - Preview what would be cleaned without making changes
-* **`npx pi restore`** - Restore the package.json from backup
+* **`npx pi restore`** - Restore the `package.json` from backup
 * **`npx pi --help`** - Show help information
 
 Package ignore (pi) is not opinionated about your release workflow. It simply provides a way to clean up and restore the `package.json` file.
 
-The `pi clean` command will look for the `package.json` file in the current directory. Additionally, it will resolve the `.package-ignore` file (see [Syntax](#syntax)), starting in the current directory, walking up the directory tree. If no `.package-ignore` file is found, the default patterns `devDependencies` will be used.
+The `npx pi clean` command will look for the `package.json` file in the current directory. Additionally, it will resolve the `.package-ignore` file (see [Syntax](#syntax)), starting in the current directory, walking up the directory tree. If no `.package-ignore` file is found, the default pattern `devDependencies` will be used. A backup file `package-ignore-backup.json` will be created in the current directory. Use `npx pi restore` to restore the `package.json` from backup.
 
 Example for a simple integration with `npm publish`:
 
