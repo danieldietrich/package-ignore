@@ -27,8 +27,8 @@
     "vulnerabilities"
   ],
   "scripts": {
-    "prepack": "pi clean",
-    "postpack": "pi restore",
+    "prepack": "node bin/index.cjs clean",
+    "postpack": "node bin/index.cjs restore",
     "test": "test/test-suite.sh"
   },
   "author": "Daniel Dietrich",
