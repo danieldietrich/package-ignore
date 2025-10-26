@@ -26,8 +26,8 @@ Example for a simple integration with `npm publish`:
 ```json
 {
   "scripts": {
-    "prepack": "npx pi clean",
-    "postpack": "npx pi restore"
+    "prepack": "pi clean",
+    "postpack": "pi restore"
   }
 }
 ```
