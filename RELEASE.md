@@ -1,7 +1,23 @@
-# Release
+# Release Process
 
-1. `npm version major|minor|patch` to update the version in the `package.json` file.
-2. Commit the changes.
-3. Run `npm pack` and check the contents of the tarball.
-4. `npm publish --dry-run` to check the package will be published to npm.
-5. `npm publish` to publish the package to npm.
+```sh
+# 1. Create and checkout a release branch
+git checkout -b release/vX.Y.Z
+
+# 2. Run npm version (creates commit and tag on the release branch)
+npm version patch  # or minor/major
+
+# 3. Push the release branch and tag to GitHub
+git push origin release/vX.Y.Z
+git push origin --tags
+
+# 4. Create a PR to merge the release branch into main
+# (Do this via GitHub UI or gh CLI)
+
+# 5. After PR is merged, checkout main and pull
+git checkout main
+git pull
+
+# 6. Publish to npm
+npm publish
+```
